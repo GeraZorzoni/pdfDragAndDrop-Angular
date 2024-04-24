@@ -1,0 +1,53 @@
+<div class="container">
+  <div #dropArea class="files-area" [ngClass]="dragOver ? 'highlight' : ''">
+    <h1 class="title">Carga de Archivos</h1>
+    <hr class="divider" />
+    <div class="files-message">
+      <span class="message">
+        Arrastra aqui los archivos PDF que desees cargar o presiona el boton
+        para buscarlos y/o seleccionarlos
+      </span>
+    </div>
+
+    <div class="selected-files">
+      <div *ngFor="let file of selectedFile; let i = index" class="file">
+        <span>{{ i + 1 }} - {{ file.name }}</span>
+        <!-- <button (click)="removeFile(file)" class="btn btn-sm btn-danger">
+          <span>&times;</span>
+        </button> -->
+      </div>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+    <div class="button-container">
+      <button (click)="openSelectedFileDialog()" class="btn-select-files">
+        Seleccionar Archivos PDF
+      </button>
+    </div>
+    <input
+      #inputFileElement
+      type="file"
+      [hidden]="true"
+      (change)="onSelectedFiles($event)"
+      [multiple]="allowMultipleFiles"
+      accept=".pdf"
+    />
+    <div class="button-container">
+      <button (click)="sendFiles()" class="btn-files">ENVIAR</button>
+      <button (click)="resetFiles()" class="btn-files">RESET</button>
+    </div>
+  </div>
+</div>
+
+<div *ngFor="let pdf of pdfSrcList; let i = index" class="pdf-view">
+  <div *ngIf="selectedFile.length > 0">
+    <div *ngFor="let file of selectedFile; let j = index">
+      <h3 *ngIf="i === j">
+        Vista Previa Archivo: {{ i + 1 }} - {{ file.name }}
+      </h3>
+    </div>
+  </div>
+
+  <iframe [src]="pdf" frameborder="0" class="pdf-item"></iframe>
+</div>
